@@ -1,5 +1,4 @@
 # Sentinel-Scan
-# Sentinel Scan
 
 ## Overview
 Sentinel Scan is a cybersecurity tool designed to fetch, analyze, and generate insights from threat intelligence data. It collects threat data from an API, aggregates the information, counts different threat types, and provides insights based on the frequency of detected threats.
