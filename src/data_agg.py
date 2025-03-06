@@ -19,7 +19,7 @@ def aggregate_data(sources):
 if __name__ == "__main__":
     sources=[
         {
-             "api_url": "https://urlhaus-api.abuse.ch/v1/urls/recent/"
+             "api_url": "enter ur api"
         }    
     ]
     aggregate_data = aggregate_data(sources)
