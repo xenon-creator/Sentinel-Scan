@@ -38,7 +38,7 @@ jobs:
     - name: Install dependencies
       run: |
         cd dashboard/frontend
-        npm ci
+        npm install
     - name: Run ESLint
       run: |
         cd dashboard/frontend
