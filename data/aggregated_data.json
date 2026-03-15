@@ -1,0 +1,22 @@
+[
+    {
+        "threat": "Malware",
+        "url": "http://malware.example.com"
+    },
+    {
+        "threat": "Phishing",
+        "url": "http://phishing.example.com"
+    },
+    {
+        "threat": "Malware",
+        "url": "http://virus.example.com"
+    },
+    {
+        "threat": "Ransomware",
+        "url": "http://crypto.example.com"
+    },
+    {
+        "threat": "Phishing",
+        "url": "http://login.example.com"
+    }
+]

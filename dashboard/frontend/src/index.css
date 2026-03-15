@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-background: #0f172a;
+    --color-panel: #1e293b;
+    --color-primary: #3b82f6;
+    --color-secondary: #64748b;
+    --color-accent: #0ea5e9;
+    --color-danger: #ef4444;
+    --color-warning: #f59e0b;
+    --color-success: #10b981;
+    --color-border: #334155;
+  }
+  
+  body {
+    background-color: var(--color-background);
+    color: #e2e8f0;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+  /* Scrollbar Styling for a sleek look */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-background);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-secondary);
+  }
+
+  /* Table styling */
+  .soc-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom-width: 1px;
+    border-color: var(--color-border);
+    background-color: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(4px);
+    position: sticky;
+    top: 0;
+  }
+  .soc-table td {
+    padding: 0.75rem 1rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    border-bottom-width: 1px;
+    border-color: var(--color-border);
+  }
+  .soc-table tr {
+    transition-property: all;
+    transition-duration: 150ms;
+  }
+  .soc-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Threat Score Badges */
+  .badge {
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    border-width: 1px;
+  }
+  .badge-danger {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--color-danger);
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+  .badge-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--color-warning);
+    border-color: rgba(245, 158, 11, 0.3);
+  }
+  .badge-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--color-success);
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+  
+  /* Glass panel effect */
+  .glass-panel {
+    background-color: var(--color-panel);
+    border-color: var(--color-border);
+    border-width: 1px;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Fallback colors for tailwind utility classes used in components */
+.text-primary { color: var(--color-primary); }
+.bg-primary { background-color: var(--color-primary); }
+.border-primary { border-color: var(--color-primary); }
+
+.text-danger { color: var(--color-danger); }
+.bg-danger { background-color: var(--color-danger); }
+.border-danger { border-color: var(--color-danger); }
+
+.text-warning { color: var(--color-warning); }
+.bg-warning { background-color: var(--color-warning); }
+.border-warning { border-color: var(--color-warning); }
+
+.text-success { color: var(--color-success); }
+.bg-success { background-color: var(--color-success); }
+.border-success { border-color: var(--color-success); }
+
+.text-secondary { color: var(--color-secondary); }
+.bg-secondary { background-color: var(--color-secondary); }
+.border-secondary { border-color: var(--color-secondary); }
+
+.bg-panel { background-color: var(--color-panel); }
+.bg-background { background-color: var(--color-background); }
+.border-border { border-color: var(--color-border); }

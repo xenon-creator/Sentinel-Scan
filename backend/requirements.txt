@@ -1,0 +1,41 @@
+# Core Framework
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+
+# Task Queue
+celery
+redis
+
+# Database
+motor
+pymongo
+
+# Security
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+
+# HTTP Client
+httpx
+aiohttp
+
+# Scanner Dependencies
+python-nmap
+requests
+
+# Utilities
+python-dotenv
+pyyaml
+jinja2
+
+# Testing
+pytest
+pytest-asyncio
+pytest-cov
+
+# Development
+black
+flake8
+mypy

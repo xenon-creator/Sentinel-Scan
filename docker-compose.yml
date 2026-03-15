@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7
+    container_name: sentinel-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=sentinel_scan
+    networks:
+      - sentinel-network
+    restart: unless-stopped
+
+  # Redis Cache & Message Broker
+  redis:
+    image: redis:7-alpine
+    container_name: sentinel-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - sentinel-network
+    restart: unless-stopped
+
+  # FastAPI Backend
+  api:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend.Dockerfile
+    container_name: sentinel-api
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - DEBUG=true
+    volumes:
+      - ./backend:/app
+      - ./reports:/app/reports
+      - ./scan_results:/app/scan_results
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - sentinel-network
+    restart: unless-stopped
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # React Frontend (Development)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend.Dockerfile
+    container_name: sentinel-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    networks:
+      - sentinel-network
+    restart: unless-stopped
+    command: npm run dev -- --host
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  sentinel-network:
+    driver: bridge

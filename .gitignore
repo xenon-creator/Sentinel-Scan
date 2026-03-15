@@ -1,0 +1,72 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+
+# Virtual Environments
+env/
+venv/
+ENV/
+.venv/
+backend/venv/
+dashboard/backend/venv/
+
+# Environment Variables - NEVER commit these
+.env
+.env.local
+.env.*.local
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Reports and scan results
+reports/
+scan_results/
+
+# Database
+*.db
+*.sqlite
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Frontend build artifacts
+dist/
+build/
+frontend/dist/
+frontend/build/
+dashboard/frontend/dist/
+dashboard/frontend/build/
+
+# Docker
+.dockerignore
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# Temporary / utility files
+*.tmp
+*.temp
+strip_comments.py
