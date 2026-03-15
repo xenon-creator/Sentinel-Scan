@@ -28,7 +28,7 @@ Since Docker is not installed, you'll need to install MongoDB and Redis manually
 
 1. **Sign up:** https://www.mongodb.com/cloud/atlas/register
 2. **Create free cluster**
-3. **Get connection string** (looks like: `mongodb+srv://username:password@cluster.mongodb.net/`)
+3. **Get connection string** (looks like: `mongodb+srv://....`)
 4. **Update `.env` file** with your connection string
 
 ### Option 3: Install Docker Desktop
