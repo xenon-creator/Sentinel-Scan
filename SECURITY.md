@@ -14,6 +14,6 @@ As a cybersecurity platform, we take the security of Sentinel-Scan extremely ser
 If you discover a potential security vulnerability in Sentinel-Scan, please do not disclose it publicly. 
 
 Instead, send an email to the Infrastructure & Security Maintainer detailing your findings:
-- [raiuga6@gmail.com]
+- (Email)[raiuga6@gmail.com]
 
 We will triage the vulnerability and provide a timeframe for the fix. Our CI/CD pipeline ensures rapid deployment of security patches for our infrastructure.
