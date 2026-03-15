@@ -1,0 +1,2 @@
+*.html linguist-detectable=false
+dashboard/frontend/public/* linguist-vendored
