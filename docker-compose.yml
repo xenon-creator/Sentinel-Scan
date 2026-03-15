@@ -28,18 +28,19 @@ services:
   # FastAPI Backend
   api:
     build:
-      context: ./backend
-      dockerfile: ../docker/backend.Dockerfile
+      context: .
+      dockerfile: ./docker/backend.Dockerfile
     container_name: sentinel-api
     ports:
       - "8000:8000"
     environment:
-      - MONGODB_URL=mongodb://mongodb:27017
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/0
       - DEBUG=true
+    env_file:
+      - .env
     volumes:
-      - ./backend:/app
+      - ./:/app
       - ./reports:/app/reports
       - ./scan_results:/app/scan_results
     depends_on:
@@ -48,21 +49,23 @@ services:
     networks:
       - sentinel-network
     restart: unless-stopped
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 
   # React Frontend (Development)
   frontend:
     build:
-      context: ./frontend
-      dockerfile: ../docker/frontend.Dockerfile
+      context: ./dashboard/frontend
+      dockerfile: ../../docker/frontend.Dockerfile
     container_name: sentinel-frontend
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/app
+      - ./dashboard/frontend:/app
       - /app/node_modules
     environment:
       - VITE_API_URL=http://localhost:8000
+    env_file:
+      - .env
     networks:
       - sentinel-network
     restart: unless-stopped

@@ -116,9 +116,9 @@ backend/
 ## Available Scanner Plugins
 
 - ✅ **Nmap** - Network port scanner
-- 🔜 **Nuclei** - Vulnerability scanner (coming soon)
-- 🔜 **OWASP ZAP** - Web application scanner (coming soon)
-- 🔜 **Trivy** - Container scanner (coming soon)
+- 🔜 **Nuclei** - Vulnerability scanner
+- 🔜 **OWASP ZAP** - Web application scanner
+- 🔜 **Trivy** - Container scanner
 
 ## Development
 
