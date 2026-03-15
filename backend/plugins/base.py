@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Optional, Any
 from dataclasses import dataclass
-from datetime import datetime
+from typing import Any, Dict, List, Optional
+
 
 @dataclass
 class ScanResult:
@@ -18,13 +18,14 @@ class ScanResult:
         if self.metadata is None:
             self.metadata = {}
 
+
 class ScannerPlugin(ABC):
-    name: str = 'base_scanner'
-    version: str = '0.1.0'
-    description: str = 'Base scanner plugin'
+    name: str = "base_scanner"
+    version: str = "0.1.0"
+    description: str = "Base scanner plugin"
     supported_targets: List[str] = []
 
-    def __init__(self, config: Optional[Dict]=None):
+    def __init__(self, config: Optional[Dict] = None):
         self.config = config or {}
         self.initialized = False
 
@@ -33,7 +34,7 @@ class ScannerPlugin(ABC):
         pass
 
     @abstractmethod
-    async def scan(self, target: str, options: Optional[Dict]=None) -> ScanResult:
+    async def scan(self, target: str, options: Optional[Dict] = None) -> ScanResult:
         pass
 
     @abstractmethod
@@ -49,4 +50,10 @@ class ScannerPlugin(ABC):
         pass
 
     def get_info(self) -> Dict[str, Any]:
-        return {'name': self.name, 'version': self.version, 'description': self.description, 'supported_targets': self.supported_targets, 'initialized': self.initialized}
+        return {
+            "name": self.name,
+            "version": self.version,
+            "description": self.description,
+            "supported_targets": self.supported_targets,
+            "initialized": self.initialized,
+        }

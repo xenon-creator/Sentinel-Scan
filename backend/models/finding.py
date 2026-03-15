@@ -1,22 +1,26 @@
-from pydantic import BaseModel, Field
-from typing import Optional, List, Dict
+import uuid
 from datetime import datetime
 from enum import Enum
-import uuid
+from typing import Dict, List, Optional
+
+from pydantic import BaseModel, Field
+
 
 class Severity(str, Enum):
-    CRITICAL = 'critical'
-    HIGH = 'high'
-    MEDIUM = 'medium'
-    LOW = 'low'
-    INFO = 'info'
+    CRITICAL = "critical"
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+    INFO = "info"
+
 
 class FindingStatus(str, Enum):
-    OPEN = 'open'
-    IN_PROGRESS = 'in_progress'
-    RESOLVED = 'resolved'
-    FALSE_POSITIVE = 'false_positive'
-    ACCEPTED_RISK = 'accepted_risk'
+    OPEN = "open"
+    IN_PROGRESS = "in_progress"
+    RESOLVED = "resolved"
+    FALSE_POSITIVE = "false_positive"
+    ACCEPTED_RISK = "accepted_risk"
+
 
 class FindingResponse(BaseModel):
     finding_id: str
@@ -40,6 +44,7 @@ class FindingResponse(BaseModel):
     status: FindingStatus = FindingStatus.OPEN
     discovered_at: datetime
     updated_at: Optional[datetime] = None
+
 
 class FindingDocument(BaseModel):
     finding_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -71,7 +76,19 @@ class FindingDocument(BaseModel):
     notes: List[str] = []
 
     class Config:
-        json_schema_extra = {'example': {'finding_id': 'find-123', 'scan_id': 'scan-456', 'title': 'SQL Injection Vulnerability', 'severity': 'critical', 'cvss_score': 9.8, 'cve_id': 'CVE-2024-1234', 'affected_asset': 'app.example.com', 'status': 'open'}}
+        json_schema_extra = {
+            "example": {
+                "finding_id": "find-123",
+                "scan_id": "scan-456",
+                "title": "SQL Injection Vulnerability",
+                "severity": "critical",
+                "cvss_score": 9.8,
+                "cve_id": "CVE-2024-1234",
+                "affected_asset": "app.example.com",
+                "status": "open",
+            }
+        }
+
 
 class FindingUpdateRequest(BaseModel):
     status: Optional[FindingStatus] = None
