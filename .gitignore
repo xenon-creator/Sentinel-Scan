@@ -70,3 +70,9 @@ htmlcov/
 *.tmp
 *.temp
 strip_comments.py
+
+dashboard/node_modules
+dashboard/build
+dashboard/dist
+
+node_modules/
