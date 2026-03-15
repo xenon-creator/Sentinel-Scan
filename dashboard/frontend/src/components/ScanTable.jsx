@@ -51,21 +51,6 @@ const ScanTable = ({ scans, loading, onRowClick }) => {
               <th className="w-1/6">Type</th>
               <th className="w-1/6">Classification</th>
               <th className="w-1/6">Score</th>
-              <th className="w-1/5">Source</th>
-              <th className="w-1/5 text-right">Time Detected</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {filteredScans.length > 0 ? (
-              filteredScans.map((scan) => (
-                <tr 
-                  key={scan.id || Math.random()} 
-                  className="cursor-pointer group"
-                  onClick={() => onRowClick && onRowClick(scan.id)}
-                >
-                  <td className="font-mono text-gray-300 group-hover:text-primary transition-colors">
-                    {scan.indicator}
-                  </td>
                   <td>
                     <span className="text-xs uppercase font-semibold text-secondary bg-black/20 px-2 py-1 rounded border border-border">
                       {scan.type}

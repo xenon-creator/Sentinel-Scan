@@ -12,22 +12,6 @@ const CustomTooltip = ({ active, payload, label }) => {
       </div>
     );
   }
-  return null;
-};
-const ThreatChart = ({ data, loading }) => {
-  if (loading) {
-    return (
-      <div className="glass-panel p-6 h-80 flex items-center justify-center">
-        <div className="animate-pulse flex space-x-4 items-end h-40 w-full justify-between px-10">
-          {[1, 2, 3, 4, 5, 6, 7].map(i => (
-             <div key={i} className="w-8 bg-border/50 rounded-t" style={{height: `${Math.random() * 100}%`}}></div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div className="glass-panel p-6 h-96 flex flex-col">
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-white">Threat Activity Trends</h3>
         <p className="text-secondary text-sm">Malicious indicators detected over the last 30 days</p>
