@@ -90,11 +90,11 @@ curl http://localhost:8000/api/v1/scans/{scan_id}
 
 ## 📚 Documentation
 
-- [Platform Design Blueprint](PLATFORM_DESIGN.md)
-- [Implementation Plan](C:\Users\raiug\.gemini\antigravity\brain\ca075d1e-5415-4b1e-b6f6-00e9884d9135\implementation_plan.md)
-- [API Documentation](docs/api/README.md) *(coming soon)*
-- [Plugin Development Guide](docs/plugins/development.md) *(coming soon)*
-- [Deployment Guide](docs/deployment/docker.md) *(coming soon)*
+- [Platform Design Blueprint](docs/PLATFORM_DESIGN.md)
+- [Implementation Plan](docs/implementation_plan.md)
+- [API Documentation](docs/api/README.md)
+- [Plugin Development Guide](docs/plugins/development.md)
+- [Deployment Guide](docs/DOCKER_INSTALL.md)
 
 ## 🛣️ Roadmap
 
@@ -123,9 +123,14 @@ curl http://localhost:8000/api/v1/scans/{scan_id}
 - [ ] Compliance frameworks
 - [ ] SOAR capabilities
 
-## 🤝 Contributing
+## 🤝 Contributing & Roles
 
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) *(coming soon)* for details.
+Sentinel-Scan is maintained by the core team:
+- **Backend Lead & Architecture:** [Saran Surya] (Python, FastAPI, MongoDB)
+- **DevOps, Cloud & Infrastructure:** [Rahul Surya] (Docker, CI/CD, Community Standards)
+- **Frontend Development:** Shared Responsibility (React, Tailwind)
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on setting up locally and our PR workflow.
 
 ## 📄 License
 
@@ -138,12 +143,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Visualized with [React](https://react.dev/)
 - Inspired by the cybersecurity community
 
-## 📧 Contact
 
-- **Project Lead:** [Your Name]
-- **Email:** your.email@example.com
-- **Website:** https://sentinel-scan.io *(coming soon)*
-- **Documentation:** https://docs.sentinel-scan.io *(coming soon)*
+- **Website:** https://sentinel-scan.io
+- **Documentation:** https://docs.sentinel-scan.io
 
 ---
 

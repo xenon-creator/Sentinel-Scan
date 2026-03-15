@@ -47,7 +47,7 @@
 3. **Get connection string**
 4. **Create `.env` file** (copy from `.env.example`):
    ```env
-   MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/sentinel_scan
+   MONGODB_URL=mongodb+srv://.....
    ```
 5. **Start Backend:**
    ```powershell
