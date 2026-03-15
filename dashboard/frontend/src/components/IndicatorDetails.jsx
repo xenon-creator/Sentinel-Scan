@@ -63,21 +63,6 @@
                   <div>
                     <span className="block text-xs text-secondary uppercase tracking-wider mb-1">Severity / Scan Status</span>
                     <span className="text-gray-200 text-sm font-medium capitalize flex items-center">
-                      <span className={`w-2 h-2 rounded-full mr-2 ${
-                          details.severity === 'critical' || details.severity === 'high' ? 'bg-danger' : 
-                          details.severity === 'medium' || details.severity === 'low' ? 'bg-warning' : 'bg-success'
-                      }`}></span>
-                      {details.severity} / {details.scan_status}
-                    </span>
-                  </div>
-                </div>
-                {details.port && (
-                  <div className="bg-black/20 p-4 rounded-xl border border-border flex items-start space-x-3 col-span-2">
-                    <Server className="w-5 h-5 text-gray-500 mt-0.5" />
-                    <div>
-                      <span className="block text-xs text-secondary uppercase tracking-wider mb-1">Service Analysis</span>
-                      <span className="text-gray-200 text-sm font-medium">
-                        Port {details.port}/{details.protocol || 'tcp'} detected open.
                       </span>
                     </div>
                   </div>
