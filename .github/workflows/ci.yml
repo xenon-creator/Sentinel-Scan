@@ -25,7 +25,7 @@ jobs:
         flake8 backend/ --count --max-complexity=10 --max-line-length=127 --statistics
     - name: Run Backend Tests
       run: |
-        PYTHONPATH=. pytest backend/
+        PYTHONPATH=. SECRET_KEY=ci_dummy_key pytest backend/
 
   frontend-tests:
     runs-on: ubuntu-latest
