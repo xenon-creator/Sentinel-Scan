@@ -1,30 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { X, ExternalLink, Shield, Server, Box, Globe, Activity } from 'lucide-react';
-import { fetchIndicatorDetails } from '../api';
-import { format } from 'date-fns';
-const IndicatorDetails = ({ indicatorId, onClose }) => {
-  const [details, setDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    if (indicatorId) {
-      setLoading(true);
-      fetchIndicatorDetails(indicatorId)
-        .then(data => {
-          setDetails(data);
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error("Failed to load indicator details:", err);
-          setLoading(false);
-        });
-    }
-  }, [indicatorId]);
-  if (!indicatorId) return null;
-  return (
-    <>
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity" onClick={onClose}></div>
-      <div className="fixed inset-y-0 right-0 w-full max-w-2xl bg-panel border-l border-border shadow-2xl z-50 overflow-y-auto transform transition-transform duration-300 ease-in-out">
-        {}
         <div className="sticky top-0 bg-panel/95 backdrop-blur z-10 border-b border-border p-6 flex justify-between items-center">
           <div>
             <h2 className="text-xl font-bold text-white flex items-center">
