@@ -1,19 +1,4 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
-const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-panel border border-border p-3 rounded-lg shadow-xl shadow-black/50">
-        <p className="text-gray-400 text-xs mb-1">{label}</p>
-        <p className="text-danger font-bold text-sm flex items-center">
-          <span className="w-2 h-2 rounded-full bg-danger mr-2"></span>
-          {payload[0].value} Malicious Indicators
-        </p>
-      </div>
-    );
-  }
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold text-white">Threat Activity Trends</h3>
         <p className="text-secondary text-sm">Malicious indicators detected over the last 30 days</p>
       </div>
       <div className="flex-1 w-full min-h-0">

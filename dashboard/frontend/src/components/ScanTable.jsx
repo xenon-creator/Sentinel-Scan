@@ -54,22 +54,6 @@ const ScanTable = ({ scans, loading, onRowClick }) => {
                   <td>
                     <span className="text-xs uppercase font-semibold text-secondary bg-black/20 px-2 py-1 rounded border border-border">
                       {scan.type}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`badge ${
-                      scan.classification === 'Malicious' ? 'badge-danger' : 
-                      scan.classification === 'Suspicious' ? 'badge-warning' : 
-                      'badge-success'
-                    }`}>
-                      {scan.classification}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="flex items-center space-x-2">
-                      <span className="font-semibold text-gray-300 w-6">{scan.threat_score}</span>
-                      <div className="w-16 h-1.5 bg-black/50 rounded-full overflow-hidden">
-                        <div 
                           className={`h-full ${
                             scan.threat_score >= 70 ? 'bg-danger' : 
                             scan.threat_score >= 40 ? 'bg-warning' : 'bg-success'
