@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.api.routes import assets, findings, scans
+from backend.api.routes import assets, findings, scans, enrich
 from backend.config import settings
 from backend.core.plugin_manager import plugin_manager
 from backend.db.mongodb import MongoDB
@@ -39,6 +39,7 @@ app.add_middleware(
 app.include_router(scans.router, prefix=settings.API_V1_PREFIX)
 app.include_router(findings.router, prefix=settings.API_V1_PREFIX)
 app.include_router(assets.router, prefix=settings.API_V1_PREFIX)
+app.include_router(enrich.router, prefix=settings.API_V1_PREFIX)
 
 
 @app.get("/")

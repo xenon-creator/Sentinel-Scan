@@ -4,130 +4,243 @@
 
 @layer base {
   :root {
-    --color-background: #0f172a;
-    --color-panel: #1e293b;
+    --color-background: #080d18;
+    --color-panel: #0f172a;
+    --color-panel-light: #1e293b;
     --color-primary: #3b82f6;
     --color-secondary: #64748b;
     --color-accent: #0ea5e9;
     --color-danger: #ef4444;
     --color-warning: #f59e0b;
     --color-success: #10b981;
-    --color-border: #334155;
+    --color-border: #1e293b;
+    --color-border-light: #334155;
   }
-  
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
   body {
     background-color: var(--color-background);
     color: #e2e8f0;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+    background-size: 64px 64px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #root {
+    position: relative;
+    z-index: 1;
   }
 }
 
 @layer components {
-  /* Scrollbar Styling for a sleek look */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background-color: var(--color-background);
-  }
+  /* ---- Scrollbar ---- */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background-color: var(--color-border);
+    background: var(--color-border-light);
     border-radius: 9999px;
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-secondary);
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-secondary); }
+
+  /* ---- Glass Panel ---- */
+  .glass-panel {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(51, 65, 85, 0.6);
+    border-radius: 0.875rem;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.3),
+      0 2px 4px -2px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    overflow: hidden;
   }
 
-  /* Table styling */
+  .glass-panel-hover {
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  .glass-panel-hover:hover {
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow:
+      0 10px 25px -5px rgba(0, 0, 0, 0.4),
+      0 4px 6px -2px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(59, 130, 246, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+  }
+
+  /* ---- Badges ---- */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-width: 1px;
+  }
+  .badge-danger {
+    background-color: rgba(239, 68, 68, 0.12);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.3);
+    text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+  }
+  .badge-warning {
+    background-color: rgba(245, 158, 11, 0.12);
+    color: #fcd34d;
+    border-color: rgba(245, 158, 11, 0.3);
+    text-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+  }
+  .badge-success {
+    background-color: rgba(16, 185, 129, 0.12);
+    color: #6ee7b7;
+    border-color: rgba(16, 185, 129, 0.3);
+    text-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+  }
+
+  /* ---- SOC Table ---- */
+  .soc-table { width: 100%; border-collapse: separate; border-spacing: 0; }
   .soc-table th {
     text-align: left;
     padding: 0.75rem 1rem;
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 700;
     color: var(--color-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom-width: 1px;
-    border-color: var(--color-border);
-    background-color: rgba(30, 41, 59, 0.5);
-    backdrop-filter: blur(4px);
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(8, 13, 24, 0.8);
+    backdrop-filter: blur(8px);
     position: sticky;
     top: 0;
+    z-index: 5;
   }
   .soc-table td {
     padding: 0.75rem 1rem;
     white-space: nowrap;
-    font-size: 0.875rem;
-    border-bottom-width: 1px;
-    border-color: var(--color-border);
+    font-size: 0.825rem;
+    border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+    transition: background 0.15s;
   }
-  .soc-table tr {
-    transition-property: all;
-    transition-duration: 150ms;
-  }
-  .soc-table tr:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+  .soc-table tr:hover td { background: rgba(59, 130, 246, 0.04); }
+  .soc-table tr:last-child td { border-bottom: none; }
+
+  /* ---- Glow Divider ---- */
+  .glow-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
   }
 
-  /* Threat Score Badges */
-  .badge {
-    padding: 0.25rem 0.625rem;
+  /* ---- Stat number ---- */
+  .stat-value {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 60%, rgba(255,255,255,0.6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ---- Pulse dot ---- */
+  .pulse-dot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
     border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.025em;
-    border-width: 1px;
+    background: var(--color-success);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
-  .badge-danger {
-    background-color: rgba(239, 68, 68, 0.1);
-    color: var(--color-danger);
-    border-color: rgba(239, 68, 68, 0.3);
-  }
-  .badge-warning {
-    background-color: rgba(245, 158, 11, 0.1);
-    color: var(--color-warning);
-    border-color: rgba(245, 158, 11, 0.3);
-  }
-  .badge-success {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: var(--color-success);
-    border-color: rgba(16, 185, 129, 0.3);
-  }
-  
-  /* Glass panel effect */
-  .glass-panel {
-    background-color: var(--color-panel);
-    border-color: var(--color-border);
-    border-width: 1px;
-    border-radius: 0.75rem;
+
+  /* ---- Threat Score Bar ---- */
+  .threat-bar {
+    height: 4px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.05);
     overflow: hidden;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+  }
+  .threat-bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
-/* Fallback colors for tailwind utility classes used in components */
-.text-primary { color: var(--color-primary); }
-.bg-primary { background-color: var(--color-primary); }
+/* ---- Utility colour classes (Tailwind fallbacks) ---- */
+.text-primary   { color: var(--color-primary); }
+.bg-primary     { background-color: var(--color-primary); }
 .border-primary { border-color: var(--color-primary); }
 
-.text-danger { color: var(--color-danger); }
-.bg-danger { background-color: var(--color-danger); }
-.border-danger { border-color: var(--color-danger); }
+.text-danger    { color: var(--color-danger); }
+.bg-danger      { background-color: var(--color-danger); }
+.border-danger  { border-color: var(--color-danger); }
 
-.text-warning { color: var(--color-warning); }
-.bg-warning { background-color: var(--color-warning); }
+.text-warning   { color: var(--color-warning); }
+.bg-warning     { background-color: var(--color-warning); }
 .border-warning { border-color: var(--color-warning); }
 
-.text-success { color: var(--color-success); }
-.bg-success { background-color: var(--color-success); }
+.text-success   { color: var(--color-success); }
+.bg-success     { background-color: var(--color-success); }
 .border-success { border-color: var(--color-success); }
 
 .text-secondary { color: var(--color-secondary); }
-.bg-secondary { background-color: var(--color-secondary); }
+.bg-secondary   { background-color: var(--color-secondary); }
 .border-secondary { border-color: var(--color-secondary); }
 
-.bg-panel { background-color: var(--color-panel); }
-.bg-background { background-color: var(--color-background); }
-.border-border { border-color: var(--color-border); }
+.bg-panel       { background-color: var(--color-panel); }
+.bg-background  { background-color: var(--color-background); }
+.border-border  { border-color: var(--color-border); }
+
+/* ---- Keyframes ---- */
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+  50%       { box-shadow: 0 0 0 5px rgba(16, 185, 129, 0); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.animate-fade-in-up { animation: fade-in-up 0.4s ease-out both; }
+
+/* ---- Skeleton loading ---- */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(51, 65, 85, 0.3) 25%,
+    rgba(71, 85, 105, 0.4) 50%,
+    rgba(51, 65, 85, 0.3) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 0.375rem;
+}

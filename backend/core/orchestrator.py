@@ -5,6 +5,7 @@ from backend.core.plugin_manager import plugin_manager
 from backend.db.mongodb import MongoDB
 from backend.models.finding import FindingDocument
 from backend.models.scan import ScanStatus
+from backend.services.enrichment_service import enrich_finding
 
 
 class ScanOrchestrator:
@@ -55,6 +56,7 @@ class ScanOrchestrator:
                     except Exception as e:
                         scan_errors.append({"plugin": plugin_name, "error": str(e)})
             severity_breakdown = self._calculate_severity_breakdown(all_findings)
+            await self._enrich_all_findings(db, all_findings)
             await db.scans.update_one(
                 {"scan_id": scan_id},
                 {
@@ -97,6 +99,20 @@ class ScanOrchestrator:
             if severity in breakdown:
                 breakdown[severity] += 1
         return breakdown
+
+    async def _enrich_all_findings(
+        self, db, findings: List[FindingDocument]
+    ) -> None:
+        for finding in findings:
+            try:
+                enrichment = await enrich_finding(finding.model_dump())
+                enrichment["enriched_at"] = datetime.utcnow().isoformat()
+                await db.findings.update_one(
+                    {"finding_id": finding.finding_id},
+                    {"$set": {"enrichment": enrichment}},
+                )
+            except Exception:
+                pass
 
 
 scan_orchestrator = ScanOrchestrator()

@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     MAX_CONCURRENT_SCANS: int = 5
     NVD_API_KEY: Optional[str] = None
     VIRUSTOTAL_API_KEY: Optional[str] = None
+    ABUSEIPDB_API_KEY: Optional[str] = None
+    OSV_API_BASE_URL: str = "https://api.osv.dev/v1"
     REPORTS_DIR: str = "./reports"
     SCAN_RESULTS_DIR: str = "./scan_results"
 
