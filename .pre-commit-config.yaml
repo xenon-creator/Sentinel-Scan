@@ -1,0 +1,23 @@
+# .pre-commit-config.yaml
+# Install: pip install pre-commit && pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # Secret scanning — catches API keys, tokens, credentials before they're committed
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.2
+    hooks:
+      - id: gitleaks
+        name: Detect hardcoded secrets
+        description: Runs gitleaks to detect secrets before commit
+
+  # Make sure .env is never staged — belt-and-suspenders on top of .gitignore
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: detect-private-key
+        name: Detect private keys
+      # This one blocks staging any file whose name matches .env patterns
+      - id: check-case-conflict

@@ -1,0 +1,31 @@
+# .gitleaks.toml
+# Gitleaks configuration for Sentinel-Scan
+# Docs: https://github.com/gitleaks/gitleaks
+
+title = "Sentinel-Scan Gitleaks Config"
+
+[extend]
+# Start from the official default ruleset
+useDefault = true
+
+[allowlist]
+description = "Allowlist for known placeholder / test values"
+
+# These are deliberately fake placeholder strings used in docs and .env.example.
+# Real secrets must never match these patterns.
+regexes = [
+  # The placeholder secret key
+  '''replace-this-with-a-strong-random-secret''',
+]
+
+# Files that are allowed to contain credential-shaped strings because they are
+# documentation, examples, or test fixtures — never the live .env file.
+paths = [
+  # Example env template — only placeholders allowed here
+  '''.env\.example''',
+  # Markdown docs that may show example curl commands with dummy tokens
+  '''docs/.*\.md''',
+  '''.*README\.md''',
+  # CI itself uses a dummy SECRET_KEY
+  '''\.github/workflows/.*\.yml''',
+]
