@@ -41,8 +41,8 @@ jobs:
 
     - name: Lint with flake8
       run: |
-        flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 backend/ --count --max-complexity=10 --max-line-length=127 --statistics
+        flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=backend/venv
+        flake8 backend/ --count --max-complexity=10 --max-line-length=127 --statistics --exclude=backend/venv
 
     - name: Run Backend Tests
       run: |
@@ -76,6 +76,9 @@ jobs:
     needs: [backend-tests, frontend-tests]
     steps:
     - uses: actions/checkout@v3
+
+    - name: Create .env from example
+      run: cp .env.example .env
 
     - name: Verify Docker Compose Build
       run: |
