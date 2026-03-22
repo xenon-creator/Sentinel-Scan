@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { X, ExternalLink, Shield, Server, Box, Globe, Activity, RefreshCw, AlertTriangle, CheckCircle, XCircle, Database, Bug } from 'lucide-react';
 import { fetchIndicatorDetails, fetchEnrichmentData } from '../api';
 import { format } from 'date-fns';
@@ -130,12 +130,12 @@ const NvdCard = ({ data }) => {
   );
 };
 
-const EnrichmentPanel = ({ findingId, cveId, enrichmentCache }) => {
+const EnrichmentPanel = ({ findingId, enrichmentCache }) => {
   const [enrichment, setEnrichment] = useState(enrichmentCache || null);
   const [loading, setLoading] = useState(!enrichmentCache);
   const [refreshing, setRefreshing] = useState(false);
 
-  const load = async (refresh = false) => {
+  const load = useCallback(async (refresh = false) => {
     if (refresh) setRefreshing(true); else setLoading(true);
     try {
       const data = await fetchEnrichmentData(findingId, refresh);
@@ -146,9 +146,9 @@ const EnrichmentPanel = ({ findingId, cveId, enrichmentCache }) => {
       setLoading(false);
       setRefreshing(false);
     }
-  };
+  }, [findingId]);
 
-  useEffect(() => { if (!enrichmentCache) load(); }, [findingId]);
+  useEffect(() => { if (!enrichmentCache) load(); }, [enrichmentCache, load]);
 
   const noSources = enrichment?.note && !enrichment?.abuseipdb && !enrichment?.virustotal && !enrichment?.nvd;
 
@@ -200,16 +200,15 @@ const EnrichmentPanel = ({ findingId, cveId, enrichmentCache }) => {
 
 const IndicatorDetails = ({ indicatorId, onClose }) => {
   const [details, setDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!!indicatorId);
 
   useEffect(() => {
-    if (indicatorId) {
-      setLoading(true);
-      setDetails(null);
-      fetchIndicatorDetails(indicatorId)
-        .then(data => { setDetails(data); setLoading(false); })
-        .catch(err => { console.error('Failed to load indicator details:', err); setLoading(false); });
-    }
+    if (!indicatorId) return;
+    let ignore = false;
+    fetchIndicatorDetails(indicatorId)
+      .then(data => { if (!ignore) { setDetails(data); setLoading(false); } })
+      .catch(err => { if (!ignore) { console.error('Failed to load indicator details:', err); setLoading(false); } });
+    return () => { ignore = true; };
   }, [indicatorId]);
 
   if (!indicatorId) return null;

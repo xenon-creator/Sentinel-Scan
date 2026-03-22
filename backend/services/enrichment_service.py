@@ -5,7 +5,6 @@ from typing import Optional
 from backend.services.abuseipdb_service import check_ip
 from backend.services.virustotal_service import scan_ip, scan_domain
 from backend.services.nvd_service import lookup_cve
-from backend.services.osv_service import query_osv
 
 _IP_RE = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
 _CVE_RE = re.compile(r"^CVE-\d{4}-\d+$", re.IGNORECASE)
@@ -34,7 +33,6 @@ def _is_domain(asset: str) -> bool:
 async def enrich_finding(finding: dict) -> dict:
     asset: str = finding.get("affected_asset", "")
     cve_id: Optional[str] = finding.get("cve_id")
-    title: str = finding.get("title", "")
 
     tasks = {}
     enrichment: dict = {"sources_queried": []}
