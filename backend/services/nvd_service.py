@@ -9,6 +9,23 @@ def _standardised_error(source: str, error: str) -> dict:
     return {"source": source, "success": False, "error": error}
 
 
+_HTTP_ERRORS = {
+    403: "Invalid or missing NVD API key (403 Forbidden)",
+    429: "NVD rate limit exceeded — slow down requests",
+    503: "NVD service temporarily unavailable (503)",
+}
+
+
+def _check_response(response, cve_id: str):
+    if response.status_code in _HTTP_ERRORS:
+        return _standardised_error("nvd", _HTTP_ERRORS[response.status_code])
+    if response.status_code == 404:
+        return _standardised_error("nvd", f"CVE not found: {cve_id}")
+    if response.status_code != 200:
+        return _standardised_error("nvd", f"Unexpected HTTP {response.status_code}")
+    return None
+
+
 def _extract_cvss(metrics: dict) -> tuple:
     for version_key in ("cvssMetricV31", "cvssMetricV30", "cvssMetricV2"):
         entries = metrics.get(version_key, [])
@@ -33,16 +50,9 @@ async def lookup_cve(cve_id: str) -> dict:
         async with httpx.AsyncClient(timeout=TIMEOUT) as client:
             response = await client.get(NVD_BASE_URL, headers=headers, params=params)
 
-        if response.status_code == 403:
-            return _standardised_error("nvd", "Invalid or missing NVD API key (403 Forbidden)")
-        if response.status_code == 404:
-            return _standardised_error("nvd", f"CVE not found: {cve_id}")
-        if response.status_code == 503:
-            return _standardised_error("nvd", "NVD service temporarily unavailable (503)")
-        if response.status_code == 429:
-            return _standardised_error("nvd", "NVD rate limit exceeded — slow down requests")
-        if response.status_code != 200:
-            return _standardised_error("nvd", f"Unexpected HTTP {response.status_code}")
+        err = _check_response(response, cve_id)
+        if err:
+            return err
 
         body = response.json()
         vulns = body.get("vulnerabilities", [])
