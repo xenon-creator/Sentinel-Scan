@@ -2,6 +2,7 @@ from typing import Dict, List, Optional, Type
 
 from backend.plugins.base import ScannerPlugin, ScanResult
 from backend.plugins.nmap_scanner import NmapScanner
+from backend.plugins.zap import ZapScanner
 
 
 class PluginManager:
@@ -12,6 +13,20 @@ class PluginManager:
 
     def _register_builtin_plugins(self):
         self.register_plugin(NmapScanner)
+
+        # Register ZAP scanner with config from settings
+        try:
+            from backend.config import settings
+            zap_config = {
+                "proxy_host": settings.ZAP_PROXY_HOST,
+                "proxy_port": settings.ZAP_PROXY_PORT,
+                "api_key": settings.ZAP_API_KEY,
+                "spider_timeout": settings.ZAP_SPIDER_TIMEOUT,
+                "active_scan_timeout": settings.ZAP_ACTIVE_SCAN_TIMEOUT,
+            }
+            self.register_plugin(ZapScanner, config=zap_config)
+        except Exception as e:
+            print(f"⚠️  ZAP plugin registration deferred: {e}")
 
     def register_plugin(
         self, plugin_class: Type[ScannerPlugin], config: Optional[Dict] = None

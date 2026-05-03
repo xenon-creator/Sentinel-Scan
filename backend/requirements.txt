@@ -23,6 +23,7 @@ aiohttp
 
 # Scanner Dependencies
 python-nmap
+zaproxy
 requests
 
 # Utilities

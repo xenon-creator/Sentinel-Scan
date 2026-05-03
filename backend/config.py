@@ -26,9 +26,18 @@ class Settings(BaseSettings):
     REPORTS_DIR: str = "./reports"
     SCAN_RESULTS_DIR: str = "./scan_results"
 
+    # OWASP ZAP Configuration
+    ZAP_PROXY_HOST: str = "127.0.0.1"
+    ZAP_PROXY_PORT: int = 8080
+    ZAP_API_KEY: Optional[str] = None
+    ZAP_SPIDER_TIMEOUT: int = 300        # 5 minutes
+    ZAP_ACTIVE_SCAN_TIMEOUT: int = 1800  # 30 minutes
+    ZAP_LOG_FILE: str = "./logs/zap.log"
+
     class Config:
         env_file = ".env"
         case_sensitive = True
+        extra = "ignore"
 
 
 settings = Settings()

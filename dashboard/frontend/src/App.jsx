@@ -6,6 +6,8 @@ import ScanResults from './pages/ScanResults';
 import ThreatAnalytics from './pages/ThreatAnalytics';
 import ApiSources from './pages/ApiSources';
 import Settings from './pages/Settings';
+import { AnimatePresence, motion } from 'framer-motion';
+import Background3D from './components/Background3D';
 
 const PAGE_TITLES = {
   dashboard:  { title: 'Overview',              sub: 'Real-time threat intelligence at a glance' },
@@ -21,13 +23,21 @@ function App() {
 
   const { title, sub } = PAGE_TITLES[activeTab] ?? PAGE_TITLES.dashboard;
 
+  const pageVariants = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+    exit: { opacity: 0, y: -10, transition: { duration: 0.2 } }
+  };
+
   return (
-    <div className="min-h-screen bg-background text-gray-200">
+    <div className="min-h-screen bg-background text-gray-800 relative overflow-hidden">
+      <Background3D />
+      
       <Header toggleSidebar={() => setSidebarOpen(o => !o)} />
 
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-10 lg:hidden"
+          className="fixed inset-0 bg-black/10 z-10 lg:hidden backdrop-blur-sm"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -36,26 +46,41 @@ function App() {
         <Sidebar activeTab={activeTab} setActiveTab={(tab) => { setActiveTab(tab); if (window.innerWidth < 1024) setSidebarOpen(false); }} />
       </div>
 
-      <main className={`transition-all duration-300 pt-16 min-h-screen ${sidebarOpen ? 'lg:pl-64' : 'lg:pl-0'}`}>
+      <main className={`transition-all duration-300 pt-16 min-h-screen relative z-10 ${sidebarOpen ? 'lg:pl-64' : 'lg:pl-0'}`}>
         <div className="p-5 md:p-7 pb-24">
           <div className="max-w-screen-2xl mx-auto space-y-6">
-            <div className="flex justify-between items-end animate-fade-in-up">
+            <motion.div 
+              key={`${activeTab}-header`}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4 }}
+              className="flex justify-between items-end"
+            >
               <div>
-                <h1 className="text-2xl font-extrabold text-white tracking-tight">{title}</h1>
+                <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">{title}</h1>
                 <p className="text-secondary text-sm mt-1">{sub}</p>
               </div>
-              <div className="hidden sm:flex items-center gap-2 text-xs text-secondary px-3 py-1.5 rounded-lg"
-                style={{ background: 'rgba(15,23,42,0.8)', border: '1px solid rgba(51,65,85,0.5)' }}>
+              <div className="hidden sm:flex items-center gap-2 text-xs text-secondary px-3 py-1.5 rounded-lg border border-border bg-white/50 backdrop-blur-sm shadow-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
                 System Healthy&nbsp;·&nbsp;Live
               </div>
-            </div>
+            </motion.div>
 
-            {activeTab === 'dashboard'  && <Dashboard />}
-            {activeTab === 'scans'      && <ScanResults />}
-            {activeTab === 'analytics'  && <ThreatAnalytics />}
-            {activeTab === 'sources'    && <ApiSources />}
-            {activeTab === 'settings'   && <Settings />}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+              >
+                {activeTab === 'dashboard'  && <Dashboard />}
+                {activeTab === 'scans'      && <ScanResults />}
+                {activeTab === 'analytics'  && <ThreatAnalytics />}
+                {activeTab === 'sources'    && <ApiSources />}
+                {activeTab === 'settings'   && <Settings />}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </main>

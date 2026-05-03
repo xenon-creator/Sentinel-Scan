@@ -1,12 +1,15 @@
 import axios from 'axios';
 
+const DASHBOARD_API_URL = import.meta.env.VITE_DASHBOARD_API_URL || 'http://localhost:8001';
+const CORE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 const api = axios.create({
-  baseURL: 'http://localhost:8001/api/v1/dashboard',
+  baseURL: `${DASHBOARD_API_URL}/api/v1/dashboard`,
   timeout: 10000,
 });
 
 const coreApi = axios.create({
-  baseURL: 'http://localhost:8000/api/v1',
+  baseURL: `${CORE_API_URL}/api/v1`,
   timeout: 20000,
 });
 

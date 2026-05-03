@@ -28,6 +28,7 @@ class ScanType(str, Enum):
 class ScanOptions(BaseModel):
     port_range: Optional[str] = "1-1000"
     scan_speed: Optional[str] = "normal"
+    scan_intensity: Optional[str] = "full"  # "quick" or "full" — used by ZAP scanner
     authenticated: Optional[bool] = False
     credentials: Optional[dict] = None
     custom_args: Optional[dict] = None

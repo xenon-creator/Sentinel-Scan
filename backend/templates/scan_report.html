@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel-Scan {{ scan_type }} Report — {{ target }}</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface-alt: #222633;
+            --border: #2d3148;
+            --text: #e4e6f0;
+            --text-muted: #8b8fa3;
+            --critical: #ff4757;
+            --high: #ff6b35;
+            --medium: #ffa502;
+            --low: #2ed573;
+            --info: #70a1ff;
+            --accent: #7c5cfc;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Inter, -apple-system, sans-serif;
+            background: var(--bg); color: var(--text);
+            line-height: 1.6; padding: 2rem;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, var(--accent), #4834d4);
+            border-radius: 12px; padding: 2rem; margin-bottom: 2rem;
+        }
+        .header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .header p { opacity: 0.85; font-size: 0.95rem; }
+        .meta-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem; margin-bottom: 2rem;
+        }
+        .meta-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 10px; padding: 1.2rem;
+        }
+        .meta-card .label { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .meta-card .value { font-size: 1.4rem; font-weight: 700; margin-top: 0.3rem; }
+        .severity-bar {
+            display: flex; border-radius: 8px; overflow: hidden;
+            height: 32px; margin-bottom: 2rem; background: var(--surface);
+        }
+        .severity-bar .segment {
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 600; min-width: 40px;
+            transition: flex 0.3s ease;
+        }
+        .seg-critical { background: var(--critical); }
+        .seg-high { background: var(--high); }
+        .seg-medium { background: var(--medium); color: #1a1d27; }
+        .seg-low { background: var(--low); color: #1a1d27; }
+        .seg-info { background: var(--info); color: #1a1d27; }
+        .severity-legend {
+            display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap;
+        }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+        .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+        .findings-section h2 {
+            font-size: 1.3rem; margin-bottom: 1rem; color: var(--text);
+            border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem;
+        }
+        .finding-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 10px; padding: 1.5rem; margin-bottom: 1rem;
+            border-left: 4px solid var(--info);
+        }
+        .finding-card.sev-critical { border-left-color: var(--critical); }
+        .finding-card.sev-high { border-left-color: var(--high); }
+        .finding-card.sev-medium { border-left-color: var(--medium); }
+        .finding-card.sev-low { border-left-color: var(--low); }
+        .finding-card.sev-info { border-left-color: var(--info); }
+        .finding-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem; }
+        .finding-title { font-size: 1.05rem; font-weight: 600; }
+        .badge {
+            display: inline-block; padding: 0.2rem 0.7rem; border-radius: 20px;
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .badge-critical { background: var(--critical); color: #fff; }
+        .badge-high { background: var(--high); color: #fff; }
+        .badge-medium { background: var(--medium); color: #1a1d27; }
+        .badge-low { background: var(--low); color: #1a1d27; }
+        .badge-info { background: var(--info); color: #1a1d27; }
+        .finding-field { margin-bottom: 0.6rem; }
+        .finding-field .field-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+        .finding-field .field-value { font-size: 0.9rem; margin-top: 0.2rem; }
+        .finding-url { word-break: break-all; color: var(--accent); font-family: monospace; font-size: 0.85rem; }
+        .footer {
+            text-align: center; margin-top: 3rem; padding: 1.5rem;
+            color: var(--text-muted); font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+        }
+        .no-findings {
+            text-align: center; padding: 3rem; color: var(--low);
+            font-size: 1.2rem; font-weight: 600;
+        }
+        @media print {
+            body { background: #fff; color: #000; padding: 1rem; }
+            .header { background: #4834d4; }
+            .finding-card { border: 1px solid #ccc; page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ Sentinel-Scan {{ scan_type }} Report</h1>
+            <p>Target: <strong>{{ target }}</strong> | Generated: {{ generated_at }}</p>
+        </div>
+
+        <div class="meta-grid">
+            <div class="meta-card">
+                <div class="label">Scan ID</div>
+                <div class="value" style="font-size:0.9rem; word-break:break-all;">{{ scan_id }}</div>
+            </div>
+            <div class="meta-card">
+                <div class="label">Duration</div>
+                <div class="value">{{ scan_duration }}</div>
+            </div>
+            <div class="meta-card">
+                <div class="label">Total Findings</div>
+                <div class="value">{{ total_vulnerabilities }}</div>
+            </div>
+            <div class="meta-card">
+                <div class="label">Scan Type</div>
+                <div class="value">{{ scan_type }}</div>
+            </div>
+        </div>
+
+        {% set total = severity_summary.values()|sum %}
+        {% if total > 0 %}
+        <div class="severity-bar">
+            {% if severity_summary.critical > 0 %}
+            <div class="segment seg-critical" style="flex: {{ severity_summary.critical }};">{{ severity_summary.critical }} Critical</div>
+            {% endif %}
+            {% if severity_summary.high > 0 %}
+            <div class="segment seg-high" style="flex: {{ severity_summary.high }};">{{ severity_summary.high }} High</div>
+            {% endif %}
+            {% if severity_summary.medium > 0 %}
+            <div class="segment seg-medium" style="flex: {{ severity_summary.medium }};">{{ severity_summary.medium }} Med</div>
+            {% endif %}
+            {% if severity_summary.low > 0 %}
+            <div class="segment seg-low" style="flex: {{ severity_summary.low }};">{{ severity_summary.low }} Low</div>
+            {% endif %}
+            {% if severity_summary.info > 0 %}
+            <div class="segment seg-info" style="flex: {{ severity_summary.info }};">{{ severity_summary.info }} Info</div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="severity-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--critical)"></div> Critical: {{ severity_summary.critical }}</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--high)"></div> High: {{ severity_summary.high }}</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--medium)"></div> Medium: {{ severity_summary.medium }}</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--low)"></div> Low: {{ severity_summary.low }}</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--info)"></div> Info: {{ severity_summary.info }}</div>
+        </div>
+
+        <div class="findings-section">
+            <h2>📋 Findings ({{ total_vulnerabilities }})</h2>
+
+            {% if findings|length == 0 %}
+            <div class="no-findings">✅ No vulnerabilities found. Target appears clean.</div>
+            {% endif %}
+
+            {% for finding in findings %}
+            <div class="finding-card sev-{{ finding.severity|lower }}">
+                <div class="finding-header">
+                    <span class="finding-title">{{ finding.title }}</span>
+                    <span class="badge badge-{{ finding.severity|lower }}">{{ finding.severity }}</span>
+                </div>
+
+                {% if finding.affected_component %}
+                <div class="finding-field">
+                    <div class="field-label">URL</div>
+                    <div class="field-value finding-url">{{ finding.affected_component }}</div>
+                </div>
+                {% endif %}
+
+                <div class="finding-field">
+                    <div class="field-label">Description</div>
+                    <div class="field-value">{{ finding.description|truncate(500) }}</div>
+                </div>
+
+                {% if finding.remediation %}
+                <div class="finding-field">
+                    <div class="field-label">Solution</div>
+                    <div class="field-value">{{ finding.remediation }}</div>
+                </div>
+                {% endif %}
+
+                {% if finding.cwe_id %}
+                <div class="finding-field">
+                    <div class="field-label">CWE</div>
+                    <div class="field-value">{{ finding.cwe_id }}</div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="footer">
+            <p>Generated by <strong>Sentinel-Scan</strong> | Report ID: {{ report_id }}</p>
+            <p>⚠️ This report is for authorized security testing only.</p>
+        </div>
+    </div>
+</body>
+</html>

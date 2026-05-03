@@ -17,11 +17,11 @@ const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="glass-panel px-3 py-2 shadow-2xl flex items-center gap-2.5">
+      <div className="glass-panel px-3 py-2 shadow-xl flex items-center gap-2.5 bg-white/90">
         <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: payload[0].payload.color }} />
         <div>
-          <p className="text-white font-semibold text-xs">{payload[0].name}</p>
-          <p className="text-gray-400 text-xs">{payload[0].value.toLocaleString()} indicators</p>
+          <p className="text-gray-900 font-semibold text-xs">{payload[0].name}</p>
+          <p className="text-gray-500 text-xs">{payload[0].value.toLocaleString()} indicators</p>
         </div>
       </div>
     );
@@ -32,7 +32,7 @@ const CustomTooltip = ({ active, payload }) => {
 const DistributionChart = ({ data, loading }) => {
   if (loading) {
     return (
-      <div className="glass-panel p-6 h-80 flex flex-col items-center justify-center">
+      <div className="glass-panel p-6 h-80 flex flex-col items-center justify-center bg-white/50">
         <div className="w-36 h-36 rounded-full skeleton" />
         <div className="mt-6 space-y-2 w-full">
           {[1, 2, 3].map(i => (
@@ -47,27 +47,19 @@ const DistributionChart = ({ data, loading }) => {
   }
 
   const hasData = data?.some(d => d.value > 0);
-  const displayData = hasData ? data : [{ name: 'No Data', value: 1, color: '#334155' }];
+  const displayData = hasData ? data : [{ name: 'No Data', value: 1, color: '#e2e8f0' }];
 
   return (
-    <div className="glass-panel p-6 h-80 flex flex-col">
+    <div className="glass-panel p-6 h-80 flex flex-col bg-white/80">
       <div className="mb-4">
-        <h3 className="text-base font-bold text-white">Threat Distribution</h3>
-        <p className="text-secondary text-xs mt-0.5">Severity classification breakdown</p>
+        <h3 className="text-base font-bold text-gray-900">Threat Distribution</h3>
+        <p className="text-secondary text-xs mt-0.5 font-medium">Severity classification breakdown</p>
       </div>
 
       <div className="flex-1 flex items-center gap-4 min-h-0">
         <div className="flex-shrink-0" style={{ width: '55%', height: '100%' }}>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <defs>
-                {displayData.map((d, i) => (
-                  <filter key={i} id={`glow-${i}`}>
-                    <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-                    <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
-                  </filter>
-                ))}
-              </defs>
               <Pie
                 data={displayData}
                 cx="50%" cy="50%"
@@ -80,7 +72,7 @@ const DistributionChart = ({ data, loading }) => {
                 cornerRadius={5}
               >
                 {displayData.map((entry, i) => (
-                  <Cell key={i} fill={entry.color} opacity={hasData ? 1 : 0.2} />
+                  <Cell key={i} fill={entry.color} opacity={hasData ? 1 : 0.5} />
                 ))}
               </Pie>
               {hasData && <Tooltip content={<CustomTooltip />} />}
@@ -91,10 +83,10 @@ const DistributionChart = ({ data, loading }) => {
         <div className="flex-1 space-y-3">
           {displayData.map((d, i) => (
             <div key={i} className="flex items-center gap-2.5">
-              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: d.color, boxShadow: `0 0 8px ${d.color}` }} />
+              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: d.color, boxShadow: `0 0 4px ${d.color}` }} />
               <div className="flex-1 min-w-0">
-                <p className="text-xs text-gray-300 font-medium truncate">{d.name}</p>
-                <p className="text-xs text-gray-600 font-mono">{d.value.toLocaleString()}</p>
+                <p className="text-xs text-gray-700 font-bold truncate">{d.name}</p>
+                <p className="text-xs text-gray-500 font-mono font-medium">{d.value.toLocaleString()}</p>
               </div>
             </div>
           ))}
